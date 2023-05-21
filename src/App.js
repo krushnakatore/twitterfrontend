@@ -5,11 +5,13 @@ import { Profile } from "./pages/Profile/Profile";
 import { Explore } from "./pages/Explore/Explore";
 import { Signin } from "./pages/Signin/Signin";
 import { Signup } from "./pages/Signup/Signup";
+import { Navbar } from "./components/Navbar/Navbar";
+import { Error } from "./pages/Error/Error";
 
 const Layout = () => {
   return (
-    <div>
-      <div>navbar</div>
+    <div className="md:w-8/12 mx-auto">
+      <Navbar />
       <Outlet></Outlet>
     </div>
   );
@@ -19,6 +21,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: <Error />,
     children: [
       {
         path: "/",
