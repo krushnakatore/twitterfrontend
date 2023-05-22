@@ -9,8 +9,16 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import FeaturedPlayListOutlinedIcon from "@mui/icons-material/FeaturedPlayListOutlined";
 import BookmarkTwoToneIcon from "@mui/icons-material/BookmarkTwoTone";
 import MoreHorizTwoToneIcon from "@mui/icons-material/MoreHorizTwoTone";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/userSlice";
 
 export const Leftsidebar = () => {
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
   return (
     <div className="flex flex-col h-full md:h-[90vh] justify-between mr-6">
       <div className="mt-6 flex flex-col space-y-4">
@@ -56,7 +64,7 @@ export const Leftsidebar = () => {
             <p>Twitter Blue</p>
           </div>
         </Link>
-        <Link to={`/profile/123`}>
+        <Link to={`/profile/${currentUser._id}`}>
           <div className="flex items-center space-x-6 px-2 py-2 hover:bg-slate-200 rounded-full cursor-pointer">
             <PersonIcon fontSize="large" />
             <p>Profile</p>
@@ -71,14 +79,14 @@ export const Leftsidebar = () => {
       </div>
       <div className="flex justify-between">
         <div>
-          <p className="font-bold">{`${"krushna"}`}</p>
-          <p className="font-bold">@{`${"krushnkatore"}`}</p>
+          <p className="font-bold">{`${currentUser.username}`}</p>
+          <p className="font-bold">@{`${currentUser.username}`}</p>
         </div>
         <div>
           <Link to="signin">
             <button
               className="bg-red-500 px-4 py-2 text-white rounded-full"
-              //   onClick={handleLogout}
+              onClick={handleLogout}
             >
               Logout
             </button>

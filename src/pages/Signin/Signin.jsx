@@ -3,6 +3,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { loginStart, loginSuccess, loginFailed } from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 export const Signin = () => {
   const [username, setUsername] = useState("");
@@ -17,11 +18,14 @@ export const Signin = () => {
     try {
       const res = await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER}/auth/signin`,
-        { username, password }
+        { username, password },
+        { withCredentials: true, credentials: "include" }
       );
       dispatch(loginSuccess(res.data));
+      toast.success("Logged In Successfully!");
       navigate("/");
     } catch (err) {
+      toast.error("Error in Login");
       dispatch(loginFailed());
     }
   };
@@ -36,12 +40,15 @@ export const Signin = () => {
           username,
           email,
           password,
-        }
+        },
+        { withCredentials: true, credentials: "include" }
       );
       dispatch(loginSuccess(res.data));
+      toast.success("Signed up Successfully!");
       navigate("/");
     } catch (err) {
       dispatch(loginFailed());
+      toast.error("Error in Signup");
     }
   };
 

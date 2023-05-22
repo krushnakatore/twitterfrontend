@@ -7,6 +7,7 @@ import { Signin } from "./pages/Signin/Signin";
 import { Signup } from "./pages/Signup/Signup";
 import { Navbar } from "./components/Navbar/Navbar";
 import { Error } from "./pages/Error/Error";
+import { Toaster } from "react-hot-toast";
 
 const Layout = () => {
   return (
@@ -50,6 +51,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <div>
+      <Toaster />
       <RouterProvider router={router}></RouterProvider>
     </div>
   );
