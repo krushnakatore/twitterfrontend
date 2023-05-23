@@ -18,8 +18,7 @@ export const Signin = () => {
     try {
       const res = await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER}/auth/signin`,
-        { username, password },
-        { withCredentials: true, credentials: "include" }
+        { username, password }
       );
       console.log("hello", res.data);
       dispatch(loginSuccess(res.data));
@@ -41,8 +40,7 @@ export const Signin = () => {
           username,
           email,
           password,
-        },
-        { withCredentials: true, credentials: "include" }
+        }
       );
       dispatch(loginSuccess(res.data));
       toast.success("Signed up Successfully!");
