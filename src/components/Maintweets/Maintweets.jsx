@@ -19,6 +19,7 @@ import {
   SentimentSatisfiedAltOutlined,
   VideocamOutlined,
 } from "@mui/icons-material";
+import EmojiPicker from "emoji-picker-react";
 
 export const Maintweets = () => {
   const [img, setImg] = useState("");
@@ -27,9 +28,12 @@ export const Maintweets = () => {
   const [video, setVideo] = useState("");
   const [imgUploadProgress, setImgUploadProgress] = useState();
   const [vidUploadProgress, setVidUploadProgress] = useState();
+  const [emojiInput, setEmojiInput] = useState("");
+  const [emojiOpen, setEmojiOpen] = useState(false);
   const [tweetText, setTweetText] = useState("");
   const [open, setOpen] = useState(false);
   const [vidOpen, setVidOpen] = useState(false);
+  const [lastEmojiIndex, setLastEmojiIndex] = useState(-1);
   const { currentUser, access_token } = useSelector((state) => state.user);
 
   const uploadImg = (file) => {
@@ -120,6 +124,31 @@ export const Maintweets = () => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Backspace" && lastEmojiIndex !== -1) {
+        const updatedText =
+          tweetText.slice(0, lastEmojiIndex - 2) +
+          tweetText.slice(lastEmojiIndex);
+        setTweetText(updatedText);
+        setLastEmojiIndex(lastEmojiIndex - 2);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [lastEmojiIndex, tweetText]);
+
+  const handleAddEmoji = (emoji) => {
+    const updatedText = tweetText + emoji.emoji;
+    setTweetText(updatedText);
+    setLastEmojiIndex(updatedText.length);
+  };
+
   return (
     <div>
       {currentUser && (
@@ -142,6 +171,7 @@ export const Maintweets = () => {
           onChange={(e) => setTweetText(e.target.value)}
           placeholder="What's Happening"
           maxLength={280}
+          value={tweetText}
           className="bg-slate-200 rounded-lg w-full p-2"
         ></textarea>
         <div className="flex justify-start mb-3 mt-2">
@@ -203,10 +233,24 @@ export const Maintweets = () => {
           )}
           <GifBoxOutlined className="text-blue-500 ml-5 cursor-pointer" />
           <PollOutlined className="text-blue-500 ml-5 cursor-pointer" />
-          <SentimentSatisfiedAltOutlined className="text-blue-500 ml-5 cursor-pointer" />
+          <SentimentSatisfiedAltOutlined
+            className="text-blue-500 ml-5 cursor-pointer"
+            onClick={() => setEmojiOpen((prev) => !prev)}
+          />
+
           <CalendarTodayOutlined className="text-blue-500 ml-5 cursor-pointer" />
           <LocationOnOutlined className="text-blue-500 ml-5 cursor-pointer" />
         </div>
+        {emojiOpen && (
+          <EmojiPicker
+            searchDisabled="true"
+            previewConfig={{ showPreview: false }}
+            emojiStyle="google"
+            onEmojiClick={handleAddEmoji}
+            height={400}
+            width="100%"
+          />
+        )}
         <button
           onClick={handleSubmit}
           className="bg-blue-500 text-white py-2 px-4 rounded-full ml-auto"

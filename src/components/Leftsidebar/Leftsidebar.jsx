@@ -70,7 +70,7 @@ export const Leftsidebar = () => {
             <p>Profile</p>
           </div>
         </Link>
-        <Link to={`/profile/123`}>
+        <Link to={`/profile/${currentUser._id}`}>
           <div className="flex items-center space-x-6 px-2 py-2 hover:bg-slate-200 rounded-full cursor-pointer">
             <MoreHorizTwoToneIcon fontSize="large" />
             <p>More</p>
