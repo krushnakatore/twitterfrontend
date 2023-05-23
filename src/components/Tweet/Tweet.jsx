@@ -7,9 +7,23 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Avatar } from "@mui/material";
 import ReactPlayer from "react-player";
+import {
+  CalendarTodayOutlined,
+  DeleteOutlineOutlined,
+  Edit,
+  GifBoxOutlined,
+  ImageOutlined,
+  LocationOnOutlined,
+  PollOutlined,
+  SentimentSatisfiedAltOutlined,
+  VideocamOutlined,
+} from "@mui/icons-material";
 
 export const Tweet = ({ tweet, setData }) => {
   const { currentUser } = useSelector((state) => state.user);
+  const [open, setOpen] = useState(false);
+  const [vidOpen, setVidOpen] = useState(false);
+  const [tweetText, setTweetText] = useState("");
   const dateStr = formatDistance(new Date(tweet.createdAt), new Date());
   const location = useLocation().pathname;
   const { id } = useParams();
@@ -61,7 +75,34 @@ export const Tweet = ({ tweet, setData }) => {
       console.log("error", err);
     }
   };
-  console.log(tweet?.video);
+
+  const handleEdit = async (e) => {
+    e.preventDefault();
+    try {
+      const updateTweet = await axios.put(
+        `${process.env.REACT_APP_BACKEND_SERVER}/tweet/update/${tweet._id}`,
+        {
+          description: tweetText,
+        },
+        { withCredentials: true, credentials: "include" }
+      );
+      window.location.reload(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleDeleteTweet = async () => {
+    try {
+      const deleteTweet = await axios.delete(
+        `${process.env.REACT_APP_BACKEND_SERVER}/tweet/delete/${tweet._id}/${currentUser._id}`,
+        { withCredentials: true, credentials: "include" }
+      );
+      window.location.reload(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
       {userData && (
@@ -85,7 +126,62 @@ export const Tweet = ({ tweet, setData }) => {
                 </Link>
                 <span className="font-normal">@{userData.username}</span>
                 <p> - {dateStr}</p>
+                {currentUser?._id === id && (
+                  <>
+                    {" "}
+                    <Edit
+                      onClick={() => setOpen(true)}
+                      className="cursor-pointer"
+                    />
+                    <DeleteOutlineOutlined
+                      onClick={() => handleDeleteTweet()}
+                      className="cursor-pointer"
+                    />
+                  </>
+                )}
               </div>
+              {open && (
+                <div className="absolute w-full h-full top-0 left-0 bg-transparent flex items-center justify-center">
+                  <div className="w-[600px] h-[600px] bg-slate-200 rounded-lg p-8 flex flex-col gap-4 relative">
+                    <button
+                      onClick={() => setOpen(false)}
+                      className="absolute top-3 right-3 cursor-pointer"
+                    >
+                      X
+                    </button>
+                    <form className="realative border-b-2 pb-6">
+                      <div className="flex justify-start mb-3 mt-2">
+                        {open && (
+                          <div className="absolute w-full h-full top-0 left-0 bg-transparent flex items-center justify-center">
+                            <div className="w-[600px] h-[600px] bg-slate-200 rounded-lg p-8 flex flex-col gap-4 relative">
+                              <button
+                                onClick={() => setOpen(false)}
+                                className="absolute top-3 right-3 cursor-pointer"
+                              >
+                                X
+                              </button>
+                              <h2 className="font-bold text-xl">Edit Tweet</h2>
+                              <textarea
+                                type="text"
+                                onChange={(e) => setTweetText(e.target.value)}
+                                placeholder="What's Happening"
+                                maxLength={280}
+                                className="bg-white-200 rounded-lg w-full p-2"
+                              ></textarea>
+                            </div>
+                            <button
+                              onClick={(e) => handleEdit(e)}
+                              className="absolute t-50 cursor-pointer bg-blue-500 text-white py-2 px-4 rounded-full ml-auto"
+                            >
+                              Tweet
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
               {tweet?.photo ? (
                 <div className="flex justify-center rounded border bg-white p-1 ">
                   <img

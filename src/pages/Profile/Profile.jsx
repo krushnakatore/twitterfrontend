@@ -175,17 +175,6 @@ export const Profile = () => {
               </div>
             </div>
           </div>
-          <div className="flex justify-between items-center">
-            {/* {userProfile?.profilePicture ? (
-              <img
-                src={userProfile?.profilePicture}
-                alt="Profile Picture"
-                className="w-12 h-12 rounded-full object-cover"
-              />
-            ) : (
-              <Avatar />
-            )} */}
-          </div>
           <div className="mt-6">
             {userTweets ? (
               userTweets.map((tweet) => {
