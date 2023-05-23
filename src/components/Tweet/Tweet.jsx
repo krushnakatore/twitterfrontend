@@ -20,7 +20,7 @@ import {
 } from "@mui/icons-material";
 
 export const Tweet = ({ tweet, setData }) => {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, access_token } = useSelector((state) => state.user);
   const [open, setOpen] = useState(false);
   const [vidOpen, setVidOpen] = useState(false);
   const [tweetText, setTweetText] = useState("");
@@ -84,7 +84,9 @@ export const Tweet = ({ tweet, setData }) => {
         {
           description: tweetText,
         },
-        { withCredentials: true, credentials: "include" }
+        {
+          headers: { Authorization: access_token },
+        }
       );
       window.location.reload(false);
     } catch (err) {
@@ -96,7 +98,9 @@ export const Tweet = ({ tweet, setData }) => {
     try {
       const deleteTweet = await axios.delete(
         `${process.env.REACT_APP_BACKEND_SERVER}/tweet/delete/${tweet._id}/${currentUser._id}`,
-        { withCredentials: true, credentials: "include" }
+        {
+          headers: { Authorization: access_token },
+        }
       );
       window.location.reload(false);
     } catch (err) {

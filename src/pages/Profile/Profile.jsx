@@ -14,7 +14,7 @@ import { Loader } from "../../components/Loader/Loader";
 
 export const Profile = () => {
   const [open, setOpen] = useState(false);
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, access_token } = useSelector((state) => state.user);
   const [userTweets, setUserTweets] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
 
@@ -49,7 +49,9 @@ export const Profile = () => {
           {
             id: currentUser._id,
           },
-          { withCredentials: true, credentials: "include" }
+          {
+            headers: { Authorization: access_token },
+          }
         );
         dispatch(following(id));
       } catch (err) {
@@ -62,7 +64,9 @@ export const Profile = () => {
           {
             id: currentUser._id,
           },
-          { withCredentials: true, credentials: "include" }
+          {
+            headers: { Authorization: access_token },
+          }
         );
 
         dispatch(following(id));

@@ -21,6 +21,7 @@ export const Signin = () => {
         { username, password },
         { withCredentials: true, credentials: "include" }
       );
+      console.log("hello", res.data);
       dispatch(loginSuccess(res.data));
       toast.success("Logged In Successfully!");
       navigate("/");

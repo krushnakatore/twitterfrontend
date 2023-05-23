@@ -15,7 +15,7 @@ export const Editprofile = ({ setOpen }) => {
   const [img, setImg] = useState("");
   const [imgUploadProgress, setImgUploadProgress] = useState();
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, access_token } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const uploadImg = (file) => {
@@ -53,7 +53,9 @@ export const Editprofile = ({ setOpen }) => {
               {
                 profilePicture: downloadURL,
               },
-              { withCredentials: true, credentials: "include" }
+              {
+                headers: { Authorization: access_token },
+              }
             );
           } catch (error) {
             console.log(error);
@@ -77,7 +79,7 @@ export const Editprofile = ({ setOpen }) => {
 
   useEffect(() => {
     img && uploadImg(img);
-  }, [img]);
+  }, [img, access_token]);
 
   return (
     <div className="absolute w-full h-full top-0 left-0 bg-transparent flex items-center justify-center">
@@ -104,7 +106,7 @@ export const Editprofile = ({ setOpen }) => {
         <p>Delete Account</p>
         <button
           className="bg-red-500 text-white py-2 rounded-full"
-          onClick={handleDelete}
+          // onClick={handleDelete}
         >
           Delete Account
         </button>

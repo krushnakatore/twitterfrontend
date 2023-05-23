@@ -30,7 +30,7 @@ export const Maintweets = () => {
   const [tweetText, setTweetText] = useState("");
   const [open, setOpen] = useState(false);
   const [vidOpen, setVidOpen] = useState(false);
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, access_token } = useSelector((state) => state.user);
 
   const uploadImg = (file) => {
     const storage = getStorage(app);
@@ -111,7 +111,9 @@ export const Maintweets = () => {
           photo: uploadPhoto,
           video: uploadVideo ? uploadVideo : null,
         },
-        { withCredentials: true, credentials: "include" }
+        {
+          headers: { Authorization: access_token },
+        }
       );
       window.location.reload(false);
     } catch (err) {
