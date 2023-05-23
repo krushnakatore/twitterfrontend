@@ -10,12 +10,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeProfile, logout } from "../../redux/userSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 export const Editprofile = ({ setOpen }) => {
   const [img, setImg] = useState("");
   const [imgUploadProgress, setImgUploadProgress] = useState();
-  const dispatch = useDispatch();
   const { currentUser, access_token } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const uploadImg = (file) => {
@@ -57,8 +58,12 @@ export const Editprofile = ({ setOpen }) => {
                 headers: { Authorization: access_token },
               }
             );
+            if (updateProfile) {
+              toast.success("Profile picture updated successfully!");
+            }
           } catch (error) {
             console.log(error);
+            toast.error("Profile picture is not updated!");
           }
 
           console.log("downloaded " + downloadURL);

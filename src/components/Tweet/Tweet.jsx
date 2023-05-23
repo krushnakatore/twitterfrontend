@@ -18,6 +18,7 @@ import {
   SentimentSatisfiedAltOutlined,
   VideocamOutlined,
 } from "@mui/icons-material";
+import { toast } from "react-hot-toast";
 
 export const Tweet = ({ tweet, setData }) => {
   const { currentUser, access_token } = useSelector((state) => state.user);
@@ -89,8 +90,10 @@ export const Tweet = ({ tweet, setData }) => {
         }
       );
       window.location.reload(false);
+      toast.success("Post edited Successfully!");
     } catch (err) {
       console.log(err);
+      toast.error("Error in Post edit");
     }
   };
 
@@ -103,8 +106,10 @@ export const Tweet = ({ tweet, setData }) => {
         }
       );
       window.location.reload(false);
+      toast.success("Post Deleted Successfully!");
     } catch (err) {
       console.log(err);
+      toast.success("Error in Post Deletion!");
     }
   };
   return (

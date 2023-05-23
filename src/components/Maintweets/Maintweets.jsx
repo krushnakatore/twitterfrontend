@@ -20,6 +20,7 @@ import {
   VideocamOutlined,
 } from "@mui/icons-material";
 import EmojiPicker from "emoji-picker-react";
+import { toast } from "react-hot-toast";
 
 export const Maintweets = () => {
   const [img, setImg] = useState("");
@@ -120,8 +121,10 @@ export const Maintweets = () => {
         }
       );
       window.location.reload(false);
+      toast.success("Post created Succesfully!");
     } catch (err) {
       console.log(err);
+      toast.error("Post cannot be empty!");
     }
   };
 
